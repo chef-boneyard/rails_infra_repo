@@ -1,0 +1,90 @@
+dn: dc=example,dc=com
+objectClass: top
+objectClass: dcObject
+objectClass: organization
+o: localdomain
+dc: localdomain
+structuralObjectClass: organization
+
+dn: cn=admin,dc=example,dc=com
+objectClass: simpleSecurityObject
+objectClass: organizationalRole
+cn: admin
+description: LDAP administrator
+userPassword: PASSWORD_HASH
+structuralObjectClass: organizationalRole
+
+dn: cn=administrators,dc=example,dc=com
+cn: administrators
+member: uid=USERID,ou=people,dc=example,dc=com
+objectClass: groupOfNames
+objectClass: top
+structuralObjectClass: groupOfNames
+
+dn: ou=people,dc=example,dc=com
+ou: people
+objectClass: top
+objectClass: organizationalUnit
+structuralObjectClass: organizationalUnit
+
+dn: ou=group,dc=example,dc=com
+ou: group
+objectClass: top
+objectClass: organizationalUnit
+structuralObjectClass: organizationalUnit
+
+dn: uid=railsdev,ou=people,dc=example,dc=com
+uid: railsdev
+sn: Developer
+givenname: Rails
+cn: Rails Developer
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: top
+loginShell: /bin/bash
+uidNumber: 2111
+gidNumber: 100
+homeDirectory: /home/railsdev
+gecos: Rails Developer
+userPassword: PASSWORD_HASH
+structuralObjectClass: inetOrgPerson
+
+dn: uid=USERID,ou=people,dc=example,dc=com
+uid: USERID
+sn: LASTNAME
+givenname: FIRSTNAME
+cn: FIRSTNAME LASTNAME
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: top
+loginShell: /bin/bash
+uidNumber: 2112
+gidNumber: 100
+homeDirectory: /home/USERID
+gecos: FIRSTNAME LASTNAME
+userPassword: PASSWORD_HASH
+structuralObjectClass: inetOrgPerson
+
+dn: cn=syncrole,dc=example,dc=com
+userPassword: PASSWORD_HASH
+objectClass: simpleSecurityObject
+objectClass: organizationalRole
+description: syncrepl role
+cn: syncrole
+structuralObjectClass: organizationalRole
+
+dn: cn=railsdev,ou=group,dc=example,dc=com
+cn: railsdev
+description: Rails Developers
+gidNumber: 2000
+memberUid: railsdev
+objectClass: posixGroup
+objectClass: top
+
+dn: cn=sysadmin,ou=group,dc=example,dc=com
+cn: sysadmin
+description: Systems Administrators
+gidNumber: 2001
+memberUid: USERID
+objectClass: posixGroup
+objectClass: top

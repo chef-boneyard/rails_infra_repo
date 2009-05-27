@@ -1,0 +1,19 @@
+{ 
+  "chef": {
+    "server_fqdn": "chef.example.com"
+  },
+  "database_master": true,
+  "openldap": {
+    "server": "ldap.example.com",
+    "basedn": "dc=example,dc=com"
+  },
+  "railsapp": {
+    "db": {
+      "database": "radiant_live",
+      "password": "radiant",
+      "user": "radiant"
+    }
+  },
+  "authorization": { "sudo": { "groups": [ "sysadmin" ] } },
+  "rsyslog": { "server": false }
+}

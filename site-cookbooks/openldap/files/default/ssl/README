@@ -1,0 +1,5 @@
+Generate SSL certificate with 
+
+  rake ssl_cert FQDN="ldap.example.com"
+  
+And copy the ldap.example.com.pem file here.

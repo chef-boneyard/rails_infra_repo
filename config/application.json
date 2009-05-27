@@ -1,0 +1,26 @@
+{
+  "chef": {
+    "server_fqdn": "chef.example.com"
+  },
+  "openldap": {
+    "server": "ldap.example.com",
+    "basedn": "dc=example,dc=com"
+  },
+  "railsapp": {
+    "app_name": "radiant",
+    "migrate": false,
+    "action": "deploy",
+    "branch": "HEAD",
+    "revision": "HEAD",
+    "migrate_command": "rake production db:migrate",
+    "db": {
+      "database": "radiant_live",
+      "password": "radiant",
+      "user": "radiant",
+      "type": "mysql"
+    },
+    "environment": "production"
+  },
+  "authorization": { "sudo": { "groups": [ "sysadmin" ] } },
+  "rsyslog": { "server": false }
+}        

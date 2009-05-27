@@ -1,0 +1,3 @@
+= Gems Packages Directory
+
+This is the directory that will be copied to the server. Put your local site gems here.

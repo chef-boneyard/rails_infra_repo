@@ -1,0 +1,28 @@
+h1. Goal
+
+h1. Assumptions
+
+h1. Requirements
+
+h1. Getting the Image
+
+h1. Bootstrap Chef Server
+
+h1. Set up Chef Repository
+
+h2. Configure Rake Tasks
+
+h2. Generate SSL Certificates
+
+h2. Create DNS Configuration
+
+h2. Prepare OpenLDAP
+
+h1. Configure Operations Master
+
+h2. Install Cookbooks 
+
+h2. Modify Node JSON Data
+
+h2. Run Chef Client
+

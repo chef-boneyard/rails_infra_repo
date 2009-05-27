@@ -1,0 +1,210 @@
+Bootstrapping an Opscode Chef Infrastructure
+
+h1. Goal 
+
+Deploy an infrastructure for hosting a Rails based web application. We will have the following systems and functions covered:
+
+* An operations master, providing centralized control over the infrastructure itself.
+* One web application server running the Rails application.
+* One database server running MySQL.
+
+Long term, we plan to increase the scope to:
+
+* Two web/application servers running the Rails application.
+* One load balancing system to distribute traffic to the Rails application.
+* Two database servers, one master and one slave, for storing application data.
+
+We provide two Amazon Machine Images (AMI) so you can get started. In the future, we will provide other virtual machine images, for KVM and VMware.
+
+h1. Assumptions and Requirements
+
+* Ubuntu 9.04
+* Chef 0.6.2
+* [Installation] instructions on the Chef Wiki were followed.
+* [jtimberman/rails_infra_repo|http://github.com/jtimberman/rails_infra_repo/tree/master]
+** Submodule: [opscode/cookbooks|http://github.com/opscode/cookbooks/tree/master] 
+
+After the installation instructions and you have a chef-server, it will be the operations master, which must be set up and configured to manage your infrastructure. 
+
+h1. Set Up Your Repository
+
+Log into your [Chef Server], you'll be doing most of the work here.
+
+These instructions will look familiar to [Chef Repository]. While we don't like to repeat ourselves (too much), we want this tutorial to be somewhat coherent.
+
+Clone the opscode/chef-repo repository from GitHub.
+
+{code}
+git clone git://github.com/opscode/chef-repo.git
+{code}
+
+Replace the cookbooks directory with the opscode/cookbooks. In a future revision, this will go to headless branches for easier upstream maintenance.
+
+{code}
+rm -rf cookbooks
+git clone git://github.com/opscode/cookbooks.git
+{code}
+
+We recommend storing your configuration recipes in a version control system. We'll set one up on the operations master server as part of this tutorial,
+
+{code}
+rm -rf .git cookbooks/.git
+{code}
+
+h1. Configure Rake Tasks
+
+Edit config/rake.rb to suit your environment. The file is commented to describe each option.
+
+The default locations are the same as the bootstrap cookbooks. If you changed these locations during [Installation], you'll need to change them here.
+
+h1. Generate SSL Certificates
+
+Once the SSL settings are modified appropriately, generate new SSL certificates for Chef. The bootstrap cookbook did this during [Installation], but created a rather generic certificate. Or, if you already have a purchased SSL certificate you would like to use, copy the 'fqdn'.pem file to the certificates directory.
+
+The ssl_cert rake task can also be used to generate certificates for your web site. We'll get to that later.
+
+h1. Create Recipes.
+
+This is already done in the chef-repo but for completion, here's the steps.
+
+{code}
+rake new_cookbook COOKBOOK=base CB_PREFIX=site-
+rake new_cookbook COOKBOOK=operations CB_PREFIX=site-
+rake new_cookbook COOKBOOK=database CB_PREFIX=site-
+rake new_cookbook COOKBOOK=application CB_PREFIX=site-
+rake new_cookbook COOKBOOK=load_balancer CB_PREFIX=site-
+{code}
+
+Also create master.rb and monitoring.rb recipes in the operations site-cookbook.
+
+h1. Create DNS Entries
+
+We use djbdns for the DNS server. Don't worry, it's easy to configure. Create a site-cookbook for the internal template. This is part of the magic of Chef. It will use the template from the site-cookbook/djbdns, but use the cookbook/djbdns for actual configuration.
+
+Here's an A record for example. 
+{code}
+=ops1.<%= @node[:domain] %>:192.168.122.5:86400
+{code}
+
+h1. Prepare LDAP
+
+Edit the openldap.ldif in the config directory. You'll need to modify it to fit your environment.
+
+|| Value || Description ||
+|dc=example_company,dc=com|Change to your domain and TLD.|
+|PASSWORD_HASH|A password hash that OpenLDAP supports.|
+|USERID|The Unix username for this user.|
+|FIRSTNAME|First name of this user.|
+|LASTNAME|Last name of this user.|
+
+The password hash can be generated with the slappasswd -s command.
+
+You can create as many users as you'd like to use in bootstrapping LDAP. The Opscode OpenLDAP cookbook has a Rakefile that can be used to generate SSL certficates, but you can use the repository base Rakefile and store them in certificates with the certificates for Chef Server.
+
+{code}
+rake ssl_cert FQDN="ldap.example.com"
+{code}
+
+Create a site-cookbook path to retrieve the certificates so we don't munge with the upstream cookbooks, like the tinydns template.
+
+{code}
+mkdir -p site-cookbooks/openldap/files/default/ssl
+cp certificates/ldap.example.com.* site-cookbooks/openldap/files/default/ssl
+{code}
+
+h1. Install Cookbooks, run Chef-Client
+
+Install the cookbooks to the server with the rake task. It will use sudo by default. Then run chef-client before adding any recipes to the ops1 node to cache all the attributes in the webui. The client will log to /var/log/chef/client.log.
+
+{code}
+rake install
+sudo chef-client
+{code}
+
+h1. Edit Default Attributes
+
+{tip:title=Metadata!}
+This is where the [Cookbook Metadata] would be used 
+{tip}
+
+We're going to change some attributes in the webui before we actually apply any recipes. Only the attributes changed for this tutorial are affected, though you may need to change others for your environment. (Change PASSWORD_HASH to match what you use in your openldap.ldif for the 'admin' user).
+
+{code:javascript|title=operations_master.json}
+{ 
+"openldap": {
+  "rootpw": "PASSWORD_HASH",
+  "server": "ldap.localdomain",
+  "basedn": "dc=localdomain",
+  "slapd_type": "master"
+},
+"djbdns": {
+  "tinydns_internal_resolved_domain": "localdomain",
+  "public_dnscache_ipaddress": "192.168.122.5",
+  "public_dnscache_allowed_networks": [
+    "192.168"
+  ],
+  "tinydns_ipaddress": "127.0.0.1",
+  "tinydns_internal_ipaddress": "127.0.0.1"
+},
+"authorization": { "sudo": { "groups": [ "sysadmin" ] } },
+"ntp": { "is_server": true },
+"rsyslog": { "server": true },
+"resolver": { "nameservers": [ "192.168.122.5" ] }
+}
+{code}
+
+Save the edit form. If it hangs on 'Saving...', it probably means there was a syntax error in the JSON data.
+
+Once the JSON data is saved for the node, add the operations::master recipe and run chef-client.
+
+{code}
+"recipes": [ "operations::master" ]
+
+sudo chef-client
+{code}
+
+----
+h1. Setting Up Clients
+
+Bootstrap a client - install the OS, and get Chef installed.
+
+{ "chef": { "server_fqdn": "ops1.localdomain" }, "recipes": "chef::client" }
+
+The chef-client service part of the bootstrap-latest.tar.gz will run Chef initially. Validate the registration in the webui. Then go to the node attributes.
+
+{code}
+"chef": {
+  "server_hostname": "ops1",
+  "server_fqdn": "ops1.localdomain"
+}
+"authorization": {
+  "sudo": {
+    "groups": ["sysadmin"],
+    "users": ["railsdev"]
+  }
+}
+{code}
+
+{code:javascript|title="database_ec2.json"}
+
+{code}
+
+Lets bootstrap an application server:
+{code}
+{
+    "railsapp": {
+      "app_name": "radiant",
+      "migrate": true,
+      "action": "deploy",
+      "branch": "HEAD",
+      "migrate_command": "yes | rake production db:bootstrap ADMIN_NAME=Administrator ADMIN_USERNAME=admin ADMIN_PASSWORD=radiant DATABASE_TEMPLATE=empty.yml",
+      "revision": "HEAD",
+      "db": {
+        "database": "radiant_live",
+        "password": "radiant",
+        "user": "radiant"
+      },
+      "environment": "production"
+    } 
+}
+{code}
