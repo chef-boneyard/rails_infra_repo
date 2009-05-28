@@ -15,5 +15,6 @@
     }
   },
   "authorization": { "sudo": { "groups": [ "sysadmin" ] } },
-  "rsyslog": { "server": false }
+  "rsyslog": { "server": false },
+  "recipes": [ "base", "database" ]
 }
