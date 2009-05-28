@@ -35,7 +35,7 @@ These instructions will look familiar to [Chef Repository]. While we don't like 
 Clone the opscode/chef-repo repository from GitHub.
 
 {code}
-git clone git://github.com/opscode/chef-repo.git
+git clone git://github.com/jtimberman/rails_infra_repo.git
 {code}
 
 Replace the cookbooks directory with the opscode/cookbooks. In a future revision, this will go to headless branches for easier upstream maintenance.
