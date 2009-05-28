@@ -18,7 +18,8 @@
 #
 
 r = gem_package "chef-deploy" do
-  source "http://gems.localdomain"
+  source "http://gems.engineyard.com"
+  action :nothing
 end
 
 r.run_action(:install)
@@ -38,7 +39,6 @@ include_recipe "rails"
 include_recipe "apache2"
 include_recipe "apache2::mod_rewrite"
 include_recipe "apache2::mod_rails"
-
 
 %w{config log pids sqlite system}.each do |dir|
   directory "/srv/#{node[:railsapp][:app_name]}/shared/#{dir}" do
