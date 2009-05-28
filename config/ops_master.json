@@ -11,5 +11,6 @@
     "slapd_type": "master"
   },
   "authorization": { "sudo": { "groups": [ "sysadmin" ] } },
-  "rsyslog": { "server": true }
+  "rsyslog": { "server": true },
+  "recipes": [ "base", "operations::master" ]
 }
