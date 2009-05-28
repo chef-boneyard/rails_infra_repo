@@ -32,7 +32,10 @@ include_recipe "build-essential"
 # include_recipe "rsync::client"
 # include_recipe "munin::node"
 # include_recipe "nagios::nrpe"
-include_recipe "ntp"
 include_recipe "postfix"
-include_recipe "resolver"
 include_recipe "nscd"
+
+unless node[:ec2]
+  include_recipe "ntp"
+  include_recipe "resolver"
+end

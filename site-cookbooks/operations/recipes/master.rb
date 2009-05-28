@@ -20,12 +20,16 @@
 include_recipe "base"
 
 include_recipe "chef::server"
-include_recipe "djbdns::cache"
-include_recipe "djbdns::internal_server"
+
+unless node[:ec2]
+  include_recipe "djbdns::cache"
+  include_recipe "djbdns::internal_server"
+  include_recipe "gems::server"
+end
+
 include_recipe "rsyslog::server"
 include_recipe "openldap::server"
 include_recipe "openldap::auth"
-include_recipe "gems::server"
 
 # include_recipe "deploy::master"
 # include_recipe "rsync::server"
