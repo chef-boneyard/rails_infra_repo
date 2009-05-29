@@ -28,8 +28,8 @@ unless node[:ec2]
 end
 
 include_recipe "rsyslog::server"
-include_recipe "openldap::server"
 include_recipe "openldap::auth"
+include_recipe "openldap::server"
 
 # include_recipe "deploy::master"
 # include_recipe "rsync::server"
