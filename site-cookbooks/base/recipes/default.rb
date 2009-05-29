@@ -16,26 +16,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
 include_recipe "ubuntu"
-include_recipe "openldap::auth"
-include_recipe "rsyslog::client"
-include_recipe "runit"
-include_recipe "ruby"
-include_recipe "perl"
-include_recipe "chef::client"
-include_recipe "sudo"
-include_recipe "zsh"
-# include_recipe "git::client"
-include_recipe "man"
-include_recipe "openssh"
-include_recipe "build-essential"
-# include_recipe "rsync::client"
-# include_recipe "munin::node"
-# include_recipe "nagios::nrpe"
-include_recipe "postfix"
-include_recipe "nscd"
 
 unless node[:ec2]
   include_recipe "ntp"
   include_recipe "resolver"
 end
+
+include_recipe "runit"
+include_recipe "ruby"
+include_recipe "perl"
+include_recipe "zsh"
+include_recipe "man"
+include_recipe "sudo"
+include_recipe "openssh"
+include_recipe "postfix"
+include_recipe "build-essential"
+include_recipe "openldap::auth"
+include_recipe "rsyslog::client"
+include_recipe "chef::client"
+# include_recipe "git::client"
+# include_recipe "rsync::client"
+# include_recipe "munin::node"
+# include_recipe "nagios::nrpe"
