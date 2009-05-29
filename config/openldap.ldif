@@ -33,22 +33,6 @@ objectClass: top
 objectClass: organizationalUnit
 structuralObjectClass: organizationalUnit
 
-dn: uid=railsdev,ou=people,dc=example,dc=com
-uid: railsdev
-sn: Developer
-givenname: Rails
-cn: Rails Developer
-objectClass: inetOrgPerson
-objectClass: posixAccount
-objectClass: top
-loginShell: /bin/bash
-uidNumber: 2111
-gidNumber: 100
-homeDirectory: /home/railsdev
-gecos: Rails Developer
-userPassword: PASSWORD_HASH
-structuralObjectClass: inetOrgPerson
-
 dn: uid=USERID,ou=people,dc=example,dc=com
 uid: USERID
 sn: LASTNAME
@@ -58,7 +42,7 @@ objectClass: inetOrgPerson
 objectClass: posixAccount
 objectClass: top
 loginShell: /bin/bash
-uidNumber: 2112
+uidNumber: 2111
 gidNumber: 100
 homeDirectory: /home/USERID
 gecos: FIRSTNAME LASTNAME
@@ -73,18 +57,10 @@ description: syncrepl role
 cn: syncrole
 structuralObjectClass: organizationalRole
 
-dn: cn=railsdev,ou=group,dc=example,dc=com
-cn: railsdev
-description: Rails Developers
-gidNumber: 2000
-memberUid: railsdev
-objectClass: posixGroup
-objectClass: top
-
 dn: cn=sysadmin,ou=group,dc=example,dc=com
 cn: sysadmin
 description: Systems Administrators
-gidNumber: 2001
+gidNumber: 2000
 memberUid: USERID
 objectClass: posixGroup
 objectClass: top
