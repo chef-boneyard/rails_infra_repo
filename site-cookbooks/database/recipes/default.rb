@@ -46,4 +46,3 @@ template "/etc/mysql/grants.sql" do
   )
   notifies :run, resources(:execute => "mysql-install-privileges"), :immediately
 end
-

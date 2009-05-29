@@ -21,7 +21,7 @@ chars = ("a".."z").to_a + ("A".."Z").to_a + ("0".."9").to_a
 20.times { |i| db_password << chars[rand(chars.size-1)] }
 
 railsapp Mash.new unless attribute?("railsapp")
-railsapp[:db] = Mash.new                   unless railsapp.has_key?(:db)
-railsapp[:db][:user] = railsapp[:app_name] unless railsapp[:db].has_key?(:user)
+railsapp[:db]            = Mash.new        unless railsapp.has_key?(:db)
+railsapp[:db][:user]     = railsapp[:app_name] unless railsapp[:db].has_key?(:user)
 railsapp[:db][:password] = db_password     unless railsapp[:db].has_key?(:password)
 railsapp[:db][:database] = "#{railsapp[:app_name]}_#{railsapp[:environment]}" unless railsapp[:db].has_key?(:database)

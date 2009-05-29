@@ -6,4 +6,3 @@ railsapp[:environment]     = "production" unless railsapp.has_key?(:environment)
 railsapp[:migrate_command] = "rake #{railsapp[:environment]} db:migrate" unless railsapp.has_key?(:migrate)
 railsapp[:migrate]         = false unless railsapp.has_key?(:migrate)
 railsapp[:action]          = "nothing" unless railsapp.has_key?(:action)
-

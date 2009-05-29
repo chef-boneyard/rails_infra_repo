@@ -59,10 +59,12 @@ template "/srv/#{node[:railsapp][:app_name]}/shared/config/database.yml" do
   mode "0664"
 end
 
-file "/srv/#{node[:railsapp][:app_name]}/shared/sqlite/production.sqlite3" do
-  owner "railsdev"
-  group "railsdev"
-  mode "0664"
+if node[:railsapp][:db][:type] =~ /sqlite/
+  file "/srv/#{node[:railsapp][:app_name]}/shared/sqlite/production.sqlite3" do
+    owner "railsdev"
+    group "railsdev"
+    mode "0664"
+  end
 end
 
 deploy "/srv/#{node[:railsapp][:app_name]}" do
