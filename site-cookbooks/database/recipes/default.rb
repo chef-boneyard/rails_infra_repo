@@ -23,7 +23,6 @@ require 'mysql'
 
 execute "create #{node[:railsapp][:db][:database]} database" do
   command "/usr/bin/mysqladmin -u root -p#{node[:mysql][:server_root_password]} create #{node[:railsapp][:db][:database]}"
-  #not_if "/usr/bin/mysql -u root -p#{node[:mysql][:server_root_password]} -e 'show databases;' | grep -qx '.*#{node[:railsapp][:db][:database]}.*'"
   not_if do
     m = Mysql.new("localhost", "root", @node[:mysql][:server_root_password])
     m.list_dbs.include?(@node[:railsapp][:db][:database])
