@@ -85,12 +85,17 @@ Need to move railsdev to a local account, not ldap, because ldap is dumb.
 Need the lowercase ops master FQDN.
   domu-12-31-39-00-6a-32.compute-1.internal
   
-Launch an instance.
-Log in when it is up.
-vi /etc/chef/client.rb, replacing the existing chef_server_fqdn with the correct from above.
-  :%s/chef_server_fqdn/domu-12-31-39-00-6a-32/
-Edit the appropriate JSON file (database or application, need database server first)
-  change chef server_fqdn and openldap server to the ops master FQDN as above.
-Run chef-client, specifying the json file appropriately.
-  chef-client -j database.json    
-  chef-client -j application.json 
+Launch an instance, log in when it is up.
+
+Update /etc/chef/client.rb and the json files locally replacing the existing chef_server_fqdn with the correct from above.
+  perl -i.bak -wpl -e 's/chef_server_fqdn/domu-12-31-39-00-6a-32.compute-1.internal/;' *.json /etc/chef/client.rb
+
+Edit the appropriate JSON file (database or application, need database server first) if other changes are needed for your environment (such as the Rails application settings, change the LDAP basedn, other attributes can be added, see the cookbooks).
+
+Get the validation_token value from the ops master, it will be in the node attribute chef[:server_token]. Create /etc/chef/validation_token with its contents equal to this value.
+
+Run chef-client, specifying the json file appropriately. 
+  chef-client -t `cat /etc/chef/validation_token` -j database.json 
+  chef-client -t `cat /etc/chef/validation_token` -j application.json 
+
+The node should register with the server automatically with the token, then run the appropriate recipes. 
