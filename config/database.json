@@ -1,4 +1,4 @@
-{ 
+{
   "chef": {
     "server_fqdn": "chef.example.com"
   },

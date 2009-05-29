@@ -1,8 +1,8 @@
 {
-  "apache2": { "listen_ports": ["80", "443"] }, 
+  "apache2": { "listen_ports": ["80", "443"] },
   "chef": {
     "server_fqdn": "chef.example.com",
-    "server_ssl_req": "/C=US/ST=Several/L=Locality/O=EC2/OU=Operations/CN=chef.compute-1.internal/emailAddress=ops@example.com"
+    "server_ssl_req": "/C=US/ST=Several/L=Locality/O=EC2/OU=Operations/CN=chef.example.com/emailAddress=ops@example.com"
   },
   "openldap": {
     "rootpw": "PASSWORD_HASH",

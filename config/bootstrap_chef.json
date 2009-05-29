@@ -1,1 +1,1 @@
-{ "chef": { "server_fqdn": "" }, "recipes": "chef::" }
+{ "chef": { "server_fqdn": "chef_server_fqdn.compute-1.internal" }, "recipes": "chef::" }
