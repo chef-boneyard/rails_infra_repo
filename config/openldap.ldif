@@ -1,10 +1,10 @@
-dn: dc=example,dc=com
-objectClass: top
-objectClass: dcObject
-objectClass: organization
-o: localdomain
-dc: localdomain
-structuralObjectClass: organization
+# dn: dc=example,dc=com
+# objectClass: top
+# objectClass: dcObject
+# objectClass: organization
+# o: example.com
+# dc: example.com
+# structuralObjectClass: organization
 
 dn: cn=admin,dc=example,dc=com
 objectClass: simpleSecurityObject
