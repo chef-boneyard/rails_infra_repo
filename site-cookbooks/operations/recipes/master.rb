@@ -30,6 +30,7 @@ end
 include_recipe "rsyslog::server"
 include_recipe "openldap::auth"
 include_recipe "openldap::server"
+include_recipe "apache2::mod_authnz_ldap"
 
 # include_recipe "deploy::master"
 # include_recipe "rsync::server"

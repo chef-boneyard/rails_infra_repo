@@ -1,5 +1,5 @@
 {
-  "apache2": { "listen_ports": ["80", "443"] },
+  "apache": { "listen_ports": ["80", "443", "444"] },
   "chef": {
     "server_fqdn": "chef.example.com",
     "server_ssl_req": "/C=US/ST=Several/L=Locality/O=EC2/OU=Operations/CN=chef.example.com/emailAddress=ops@example.com"
