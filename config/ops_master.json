@@ -1,16 +1,3 @@
 {
-  "apache2": { "listen_ports": ["80", "443"] },
-  "chef": {
-    "server_fqdn": "chef.example.com",
-    "server_ssl_req": "/C=US/ST=Several/L=Locality/O=EC2/OU=Operations/CN=chef.example.com/emailAddress=ops@example.com"
-  },
-  "openldap": {
-    "rootpw": "PASSWORD_HASH",
-    "server": "ldap.example.com",
-    "basedn": "dc=example,dc=com",
-    "slapd_type": "master"
-  },
-  "authorization": { "sudo": { "groups": [ "sysadmin" ] } },
-  "rsyslog": { "server": true },
-  "recipes": [ "base", "operations::master" ]
+  "run_list": [ "role[base]", "role[ops_master]" ]
 }
